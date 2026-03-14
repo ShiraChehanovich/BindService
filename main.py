@@ -1,18 +1,6 @@
-import random
-import asyncio
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
+from src.EntryPoint.controllers.bind import router as bind_router
 
 app = FastAPI()
 
-FAIL_PROBABILITY = 0.4        
-TIMEOUT_PROBABILITY = 0.5    
-TIMEOUT_SECONDS = 10        
-
-@app.post("/bind")
-async def bind():
-    if random.random() < FAIL_PROBABILITY:
-        if random.random() < TIMEOUT_PROBABILITY:
-            await asyncio.sleep(TIMEOUT_SECONDS)
-        raise HTTPException(status_code=500, detail="Random failure")
-
-    return {"status": "ok"}
+app.include_router(bind_router)
